@@ -75,12 +75,13 @@ if __name__ == '__main__':
 		    {'id': 'importer_1', 'module': 'importer',
 		     'inputs': [{'import_descr': {'source': file,
 		     'type': 'raster'}, 'param': 'map', 'value': 'input_eval'}]},
-		    {'id': 'r_neighbours', 'module': 'r.neighbours', 'inputs': [{'param': 'raster',
-		     'value': 'input_eval'}, {'param':'size', 'value':'7'}]},
+		    {'id': 'r_neighbors', 'module': 'r.neighbors', 'inputs': [{'param': 'input',
+		     'value': 'input_eval'},{'param': 'output',
+		     'value': 'sim_eval'}, {'param':'size', 'value':'7'}]},
 
 		    {'id': 'exporter_1', 'module': 'exporter',
 		     'outputs': [{'export': {'type': 'raster', 'format': 'GTiff'},
-		     'param': 'map', 'value': 'NDVI'}  ]},
+		     'param': 'map', 'value': 'sim_eval'}  ]},
 		    ], 'version': '1'} 
 		    	
 
