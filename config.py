@@ -1,10 +1,13 @@
 settings = {
-	"aoi":"https://gdh-data-sandbox.ams3.digitaloceanspaces.com/data/petilang-jaya-boundary.geojson",
-	"systems":["GI", "TRANS", "URBAN", "AG", "HYDRO"],
-	# "systems":["GI"],
+	"aoi":"https://gdh-data-sandbox.ams3.digitaloceanspaces.com/data/brazil_polygon.json",
+  "systems":["GI", "TRANS", "URBAN", "AG", "HYDRO"],
+  
+  # "systems": ['GI'],
 	"outputdirectory":"output",
 	"workingdirectory": "working", 
-	"sentinelscene": "S2A_MSIL1C_20170203T032931_N0204_R018_T47NQD_20170203T034408"
+	"sentinelscene": "S2B_MSIL1C_20171010T133209_N0205_R081_T23LKC_20171010T133528",
+  "rivers":"rivers/rivers.shp",
+  "watersheds":"watershed/watershed.shp"
 }
 processchains = {
 	"GI":{"list": [{"id": "importer_1",

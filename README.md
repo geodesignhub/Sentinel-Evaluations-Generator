@@ -10,12 +10,14 @@ Making evaluation maps is the most time consuming part of a Geodesign study, usi
 
 Find out more about evaluation maps at the [Making Evaluations Maps](https://community.geodesignhub.com/t/making-evaluation-maps/62) in our community page. 
 
-At the moment, this is best suited for generating evaluations at regional level and for studies for where the study area is at a regional scale larger than a few neighbourhoods. Please take a look at the complementary [OSM evaluation maps builder](https://geodesignhub.github.io/OSM-Evaluations-Builder/)
+At the moment, this is best suited for generating evaluations at regional level and for studies for where the study area is at a regional scale larger than a few neighbourhoods. Please take a look at the complementary [OSM evaluation maps builder](https://geodesignhub.github.io/OSM-Evaluations-Builder/). 
+
+
 
 If you are new to Geodesignhub, please see our course at [Teachable.com](https://geodesignhub.teachable.com/p/geodesign-with-geodesignhub/)  
 
 ## Technical Details
-TBC: Complete the technical details of how these files are generated. 
+This program takes in Earth Observation imagery and produces Evaluation maps for Agriculture, Green Infrastructure, Urban and Transport systems. Below are links to how these maps are generated in GIS and this script aims to replicate them using the Mundialis Actinia platform and open source GIS tools and libraries. 
 
 ## Installation
 Use the requirements.txt file to install libraries that are required for the program
@@ -24,7 +26,7 @@ Use the requirements.txt file to install libraries that are required for the pro
 pip install requirements.txt
 ```
 
-## 3-Step process
+## 4-Step process
 **1. Study area boundary and Sentinel Scene**
 
 1. Upload a GeoJSON boundary file to a publically accessible location e.g. Google Storage or Digital Ocean Spaces.
@@ -37,7 +39,15 @@ pip install requirements.txt
 1. In config.py set the URL of the boundary GeoJSON in the `aoi` variable
 2. Set the Sentinel scence name in the `sentinelscene` parameter (e.g. S2A_MSIL1C_20170203T032931_N0204_R018_T47NQD_20170203T034408)
 
-**3. Upload Evaluations**
+**3. Generate Evaluations**
 
 1. Run the `Mundialis-Evaluations-Generator.py` script and check the `output` folder for the Evaluation Rasters
 2. Run the `Raster-Evaluations-Processor.py` to further process the evaluations
+
+**4. Post Processing**
+
+1. The script generates Raster files (*.tiff) that need to be further processed since Geodesignhub accepts only Vectors (GeoJSON). 
+2. The script will generate GeoJSON based on the Rasters that are reclassfied, you can do it yourself using GIS and the following steps are recommended to enable uploads to Geodesignhub: 
+	- Simplify the files using r.neighbours command
+	- Convert to vectors
+	- Reclassify the vectors to the approrpriate "areatype" attribute

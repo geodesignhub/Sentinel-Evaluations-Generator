@@ -10,6 +10,7 @@ from shapely.ops import unary_union
 from urlparse import urlparse
 from os.path import splitext, basename
 
+
 class EvaluationsFactory():
 	''' This is the main class to connect to Mundialis '''
 	def __init__(self):
@@ -63,36 +64,27 @@ class EvaluationsFactory():
 				self.downloadOutput(outputurls)
 
 
-
-	def downloadOutput(self, urls):
-		
-		for url in urls: 
-			headers = {'content-type': 'application/json'}
-			print "Downloading from %s..." % url
-			disassembled = urlparse(url)
-			filename = basename(disassembled.path)
-			cwd = os.getcwd()
-			outputdirectory = os.path.join(cwd,config.settings['outputdirectory'])
-			if not os.path.exists(outputdirectory):
-				os.mkdir(outputdirectory)
-			local_filename = os.path.join(outputdirectory, filename)
-			r = requests.get(url,auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, stream=True)
-			with open(local_filename, 'wb') as f:
-			    for chunk in r.iter_content(chunk_size=1024): 
-			        if chunk: # filter out keep-alive new chunks
-			            f.write(chunk)
-			            #f.flush() commented by recommendation from J.F.Sebastian
-			
-
 if __name__ == '__main__':
-	aoiurl = config.settings['aoi']
-	systems = config.settings['systems']
 	myEvaluationsFactory = EvaluationsFactory()
 	allstatusurls = []
-	for system in systems: 
-		currentprocesschain = config.processchains[system]
-		resp = myEvaluationsFactory.executeProcessChain(currentprocesschain)
-		
+	files = ['https://gdh-data-sandbox.ams3.digitaloceanspaces.com/rasters/urban.tiff']	
+
+	# files = ['https://gdh-data-sandbox.ams3.digitaloceanspaces.com/rasters/urban.tiff','https://gdh-data-sandbox.ams3.digitaloceanspaces.com/rasters/TRANS.tiff','https://gdh-data-sandbox.ams3.digitaloceanspaces.com/rasters/ag.tiff','https://gdh-data-sandbox.ams3.digitaloceanspaces.com/rasters/GI.tiff']
+	for file in files: 
+		simplificationprocesschain = {'list': [
+		    {'id': 'importer_1', 'module': 'importer',
+		     'inputs': [{'import_descr': {'source': file,
+		     'type': 'raster'}, 'param': 'map', 'value': 'input_eval'}]},
+		    {'id': 'r_neighbours', 'module': 'r.neighbours', 'inputs': [{'param': 'raster',
+		     'value': 'input_eval'}, {'param':'size', 'value':'7'}]},
+
+		    {'id': 'exporter_1', 'module': 'exporter',
+		     'outputs': [{'export': {'type': 'raster', 'format': 'GTiff'},
+		     'param': 'map', 'value': 'NDVI'}  ]},
+		    ], 'version': '1'} 
+		    	
+
+		resp = myEvaluationsFactory.executeProcessChain(simplificationprocesschain)
 		isSuccessful, statusurl = myEvaluationsFactory.parseProcessChainResponse(resp)
 		print statusurl
 		if isSuccessful: 
@@ -101,4 +93,5 @@ if __name__ == '__main__':
 	if allstatusurls:
 		myEvaluationsFactory.pollStatusURL(statusurl)
 
-	
+
+
