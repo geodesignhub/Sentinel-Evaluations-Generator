@@ -18,6 +18,12 @@ If you are new to Geodesignhub, please see our course at [Teachable.com](https:/
 
 ## Technical Details
 This program takes in Earth Observation imagery and produces Evaluation maps for Agriculture, Green Infrastructure, Urban and Transport systems. Below are links to how these maps are generated in GIS and this script aims to replicate them using the Mundialis Actinia platform and open source GIS tools and libraries. 
+The following PDFs detail the steps to be taken to generate these maps: 
+
+1. [Generating Green Infrastructure Evaluation map](https://github.com/geodesignhub/Sentinel-Evaluations-Generator/blob/master/PPT/Methodology%20to%20produce%20a%20green%20map%20using%20GIS.pdf)
+2. [Generating Agriculture Evaluation map](https://github.com/geodesignhub/Sentinel-Evaluations-Generator/blob/master/PPT/Methodology%20to%20produce%20the%20agri%20map%20using%20GIS.pdf)
+3. [Generating Urban Infrastucture Evaluation map](https://github.com/geodesignhub/Sentinel-Evaluations-Generator/blob/master/PPT/Methodology%20to%20produce%20a%20urban%20and%20using%20GIS.pdf)
+4. [Generating Transport Map](https://github.com/geodesignhub/Sentinel-Evaluations-Generator/blob/master/PPT/Methodology%20to%20produce%20a%20Transportation%20System%20using%20GIS.pdf) 
 
 ## Installation
 Use the requirements.txt file to install libraries that are required for the program
@@ -29,10 +35,16 @@ pip install requirements.txt
 ## 4-Step process
 **1. Study area boundary and Sentinel Scene**
 
-1. Upload a GeoJSON boundary file to a publically accessible location e.g. Google Storage or Digital Ocean Spaces.
+1. Upload a GeoJSON boundary file to a publically accessible location e.g. [Google Storage](https://cloud.google.com/storage/) or [Digital Ocean Spaces](https://www.digitalocean.com/products/object-storage/) as a JSON file.
 2. Use the [Sentinel Scene explorer](https://eome.mundialis.de/eome/client/index.html) to select a appropriate sentinel scene. 
-3. Enter your Mundialis Username and password. 
-
+3. Create file call `ActiniaCredentials.py` and enter your Mundialis Username and passwordin the following format: 
+```python
+cred = {
+	"username" : 'YOUR_MUNDIALIS_USERNAME', 
+	"password" : 'YOUR_MUNDIALIS_PASSWORD', 
+}
+```
+	- You can request your Mundialis credentials by filling out their contact [form](https://www.mundialis.de/contact/)
 
 **2. Update config.py**
 
@@ -46,8 +58,9 @@ pip install requirements.txt
 
 **4. Post Processing**
 
-1. The script generates Raster files (*.tiff) that need to be further processed since Geodesignhub accepts only Vectors (GeoJSON). 
-2. The script will generate GeoJSON based on the Rasters that are reclassfied, you can do it yourself using GIS and the following steps are recommended to enable uploads to Geodesignhub: 
+1. One of the first things that you can do is use `RasterSimplifier.py` file to simplify the generated evaluation maps. This script will take the generated files from above and simplify it.
+2. The script generates Raster files (*.tiff) that need to be further processed since Geodesignhub accepts only Vectors (GeoJSON). 
+3. The script will generate GeoJSON based on the Rasters that are reclassfied, you can do it yourself using GIS and the following steps are recommended to enable uploads to Geodesignhub: 
 	- Simplify the files using r.neighbours command
 	- Convert to vectors
 	- Reclassify the vectors to the approrpriate "areatype" attribute
