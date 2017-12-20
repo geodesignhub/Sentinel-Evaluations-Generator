@@ -17,7 +17,7 @@ At the moment, this is best suited for generating evaluations at regional level 
 If you are new to Geodesignhub, please see our course at [Teachable.com](https://geodesignhub.teachable.com/p/geodesign-with-geodesignhub/)  
 
 ## Technical Details
-This program takes in Earth Observation imagery and produces Evaluation maps for Agriculture, Green Infrastructure, Urban and Transport systems. Below are links to how these maps are generated in GIS and this script aims to replicate them using the Mundialis Actinia platform and open source GIS tools and libraries. 
+This program takes in Earth Observation imagery and produces Evaluation maps for Agriculture, Green Infrastructure, Urban and Transport systems. Below are links to how these maps are generated in desktop GIS software such as ArcGIS or QGIS. This script aims to replicate them using the Mundialis Actinia platform (GRASS as a service) and open source GIS tools and libraries. 
 The following PDFs detail the steps to be taken to generate these maps: 
 
 1. [Generating Green Infrastructure Evaluation map](https://github.com/geodesignhub/Sentinel-Evaluations-Generator/blob/master/PPT/Methodology%20to%20produce%20a%20green%20map%20using%20GIS.pdf)
