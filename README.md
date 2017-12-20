@@ -37,14 +37,14 @@ pip install requirements.txt
 
 1. Upload a GeoJSON boundary file to a publically accessible location e.g. [Google Storage](https://cloud.google.com/storage/) or [Digital Ocean Spaces](https://www.digitalocean.com/products/object-storage/) as a JSON file.
 2. Use the [Sentinel Scene explorer](https://eome.mundialis.de/eome/client/index.html) to select a appropriate sentinel scene. 
-3. Create file call `ActiniaCredentials.py` and enter your Mundialis Username and passwordin the following format: 
+3. Create file call `ActiniaCredentials.py` and enter your Mundialis Username and passwordin the following format (You can request your Mundialis credentials by filling out their contact [form](https://www.mundialis.de/contact/)): 
+
 ```python
 cred = {
 	"username" : 'YOUR_MUNDIALIS_USERNAME', 
 	"password" : 'YOUR_MUNDIALIS_PASSWORD', 
 }
 ```
-	- You can request your Mundialis credentials by filling out their contact [form](https://www.mundialis.de/contact/)
 
 **2. Update config.py**
 
