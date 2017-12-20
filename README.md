@@ -37,7 +37,7 @@ pip install requirements.txt
 
 1. Upload a GeoJSON boundary file to a publically accessible location e.g. [Google Storage](https://cloud.google.com/storage/) or [Digital Ocean Spaces](https://www.digitalocean.com/products/object-storage/) as a JSON file.
 2. Use the [Sentinel Scene explorer](https://eome.mundialis.de/eome/client/index.html) to select a appropriate sentinel scene. 
-3. Create file call `ActiniaCredentials.py` and enter your Mundialis Username and passwordin the following format (You can request your Mundialis credentials by filling out their contact [form](https://www.mundialis.de/contact/)): 
+3. Create file named in the working directory `ActiniaCredentials.py` and enter your Mundialis Username and passwordin the following format (You can request your Mundialis credentials by filling out their contact [form](https://www.mundialis.de/contact/)): 
 
 ```python
 cred = {
@@ -49,7 +49,7 @@ cred = {
 **2. Update config.py**
 
 1. In config.py set the URL of the boundary GeoJSON in the `aoi` variable
-2. Set the Sentinel scence name in the `sentinelscene` parameter (e.g. S2A_MSIL1C_20170203T032931_N0204_R018_T47NQD_20170203T034408)
+2. Set the Sentinel scence name in the `sentinelscene` parameter (for e.g. S2A_MSIL1C_20170203T032931_N0204_R018_T47NQD_20170203T034408)
 
 **3. Generate Evaluations**
 
@@ -58,7 +58,7 @@ cred = {
 
 **4. Post Processing**
 
-1. One of the first things that you can do is use `RasterSimplifier.py` file to simplify the generated evaluation maps. This script will take the generated files from above and simplify it.
+1. One of the first things that you can do is use `RasterSimplifier.py` file to simplify the generated evaluation maps. This script will take the generated files from above and simplify it to generate simplified copies of the file.
 2. The script generates Raster files (*.tiff) that need to be further processed since Geodesignhub accepts only Vectors (GeoJSON). 
 3. The script will generate GeoJSON based on the Rasters that are reclassfied, you can do it yourself using GIS and the following steps are recommended to enable uploads to Geodesignhub: 
 	- Simplify the files using r.neighbours command
