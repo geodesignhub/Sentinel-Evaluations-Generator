@@ -49,7 +49,7 @@ cred = {
 **2. Update config.py**
 
 1. In config.py set the URL of the boundary GeoJSON in the `aoi` variable
-2. Set the Sentinel scence name in the `sentinelscene` parameter (for e.g. S2A_MSIL1C_20170203T032931_N0204_R018_T47NQD_20170203T034408)
+2. Set the Sentinel scence name in the `sentinelscene` parameter (for e.g. S2A_MSIL1C_20170203T032931_N0204_R018_T47NQD_20170203T034408), it is recommended that you choose a scene with 20% or less cloud cover. You can use the [Copernicus Open Hub](https://scihub.copernicus.eu/dhus/) or the [EOME tool](https://eome.mundialis.de/eome/client/index.html) to select the appropriate scene. 
 
 **3. Generate Evaluations**
 
