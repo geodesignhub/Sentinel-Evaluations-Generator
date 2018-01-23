@@ -1,5 +1,5 @@
 # Geodesignhub Sentinel Evaluation Maps Builder
-This program uses open data from the EU [Copernicus](https://scihub.copernicus.eu/) program and [Mundialis Actinia Platform](https://www.mundialis.de/en/copernicus-and-sentinel/) to develop Evaluation maps for [Geodesignhub](https://www.geodesignhub.com/). This program uses a combination of image processing on Earth Observation images to develop evaluation maps in Raster at 10m resolution for any site across the world where Sentinel earth observation images are available. 
+This sofware utilizes open data from the EU [Copernicus](https://scihub.copernicus.eu/) program and [Mundialis Actinia Platform](https://www.mundialis.de/en/copernicus-and-sentinel/) to develop Evaluation maps for [Geodesignhub](https://www.geodesignhub.com/). This program uses a combination of image processing on Earth Observation images to develop evaluation maps in Raster at 10m resolution for any site across the world where Sentinel earth observation images are available. 
 Making evaluation maps is the most time consuming part of a Geodesign study, using this script it can be automated. The following evaluation maps are generated: 
 
 * Green Infrastructure (GI)
