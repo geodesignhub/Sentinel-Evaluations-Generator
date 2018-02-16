@@ -12,7 +12,7 @@ from rasterio import crs
 from rasterio.tools.mask import mask
 from pysal.esda.mapclassify import Natural_Breaks as nb
 import config, requests
-from urlparse import urlparse
+from urllib.parse import urlparse
 from os.path import splitext, basename
 
 class DataDownloader():
@@ -30,7 +30,7 @@ class DataDownloader():
                 os.mkdir(workingdirectory)
             local_filename = os.path.join(workingdirectory, filename)
             if not os.path.exists(local_filename):
-                print "Downloading from %s..." % url
+                print("Downloading from %s..." % url)
                 r = requests.get(url, stream=True)
                 with open(local_filename, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024): 
@@ -63,7 +63,7 @@ class EvaluationsProcessor():
 
 
     def computeTransportNaturalBreaks(self, rawtransfile):
-        print "Computing Natural breaks on Transport.."
+        print("Computing Natural breaks on Transport..")
 
         myDataDownloader = DataDownloader()
         localfile = myDataDownloader.downloadFiles([config.settings['aoi']])
@@ -84,7 +84,7 @@ class EvaluationsProcessor():
         
         # bins.insert(1,-1) # add -1 to the beginning of the breaks
         # print bins
-        print "Writing new Transport with Natural break classes.."
+        print("Writing new Transport with Natural break classes..")
         with rasterio.open(rawtransfile) as src:
             profile = src.profile
             bands = src.read(masked=True)
@@ -100,7 +100,7 @@ class EvaluationsProcessor():
 
         classfiedtranspath = os.path.join(self.cwd,config.settings['outputdirectory'],'classified-transport.tiff')
             
-        print "Cropping Transport.."
+        print("Cropping Transport..")
         with rasterio.open(classfiedtranstmppath) as trans_src:
             trans_out_image, trans_out_transform = mask(trans_src, geoms, crop=True)
             trans_out_meta = trans_src.meta.copy()
@@ -114,7 +114,7 @@ class EvaluationsProcessor():
 
         TransClassification = dict([(1,2),(2,3),(3,1)])
 
-        print "Reclassing Transport file.."
+        print("Reclassing Transport file..")
 
         finaltransevalpath = os.path.join(self.cwd,config.settings['outputdirectory'],'evals','TRANS', 'TRANS.tiff')
             
@@ -126,12 +126,12 @@ class EvaluationsProcessor():
 
             with rasterio.open(finaltransevalpath, 'w', **classifiedprofile) as classifieddst:
                 classifieddst.write(classifiedbands2)
-        print "Reclassing completed"
-        print "..."
+        print("Reclassing completed")
+        print("...")
 
 
     def computeNDVINaturalBreaks(self, rawndvifile):
-        print "Computing Natural breaks on NDVI.."
+        print("Computing Natural breaks on NDVI..")
         self.files['ndvi_file'] = rawndvifile
         with rasterio.open(rawndvifile) as src:
             profile = src.profile
@@ -146,7 +146,7 @@ class EvaluationsProcessor():
         
         classfiedndvitmppath = os.path.join(self.cwd,config.settings['outputdirectory'],'tmp','classified-ndvi.tiff')
     
-        print "Writing new NDVI with Natural break classes.."
+        print("Writing new NDVI with Natural break classes..")
         with rasterio.open(rawndvifile) as src:
             profile = src.profile
             bands = src.read(masked=True)
@@ -162,7 +162,7 @@ class EvaluationsProcessor():
 
 
     def classifyUrbanSlope(self, rawslopepath):
-        print "Classifying Slope file for Urban..."
+        print("Classifying Slope file for Urban...")
         self.files['slope_file'] = rawslopepath
         bins = [-1,5,13,30,47]
 
@@ -179,11 +179,11 @@ class EvaluationsProcessor():
             with rasterio.open('output/tmp/classified-slope-urban.tiff', 'w', **profile) as dst:
                 dst.write(bands)
 
-        print "Making copy of initial slope file"
+        print("Making copy of initial slope file")
         self.files['classifiedurbanslope'] ='output/tmp/classified-slope-urban.tiff'
         shutil.copyfile(self.files['classifiedurbanslope'], 'output/classified-slope.tiff')
 
-        print "Normalizing URB slope file.."
+        print("Normalizing URB slope file..")
         with rasterio.open('output/tmp/classified-slope-urban.tiff') as classifedsrc:
             classifiedprofile = classifedsrc.profile
             classifiedbands = classifedsrc.read(masked=True)
@@ -194,7 +194,7 @@ class EvaluationsProcessor():
 
     def classifyAGSlope(self, rawslopepath):
         self.files['slope_file'] = rawslopepath
-        print "Classifying Slope file for AG..."
+        print("Classifying Slope file for AG...")
         bins = [-1, 5, 8, 15, 25]
 
         with rasterio.open(self.files['slope_file']) as src:
@@ -210,7 +210,7 @@ class EvaluationsProcessor():
                 dst.write(bands)
 
 
-        print "Normalizing AG Slope file.."
+        print("Normalizing AG Slope file..")
         with rasterio.open('output/tmp/classified-slope-AG.tiff') as classifedsrc:
             classifiedprofile = classifedsrc.profile
             classifiedbands = classifedsrc.read(masked=True)
@@ -234,7 +234,7 @@ class EvaluationsProcessor():
         self.files['classified_cropped_ndvi_file']="output/classified-ndvi-cropped.tiff"
 
 
-        print "Cropping Classified Slope and NDVI.."
+        print("Cropping Classified Slope and NDVI..")
         with rasterio.open('output/tmp/classified-slope-urban-normalized.tiff') as urb_src:
             urb_out_image, urb_out_transform = mask(urb_src, geoms, crop=True)
             urb_out_meta = urb_src.meta.copy()
@@ -271,12 +271,12 @@ class EvaluationsProcessor():
 
 
     def generateGIOutput(self):
-        print "Processing GI Output"
+        print("Processing GI Output")
         shutil.copyfile(self.files['classified_cropped_ndvi_file'], 'output/tmp/gi-nogdhclasses.tiff')
         # 1 existing 2 Not appropriate 3: Capable 4: Suitable 5: Feasable 
         GIClassification = dict([(1,2),(2,5),(3,4),(4,1),(5,1)])
 
-        print "Reclassing GI file.."
+        print("Reclassing GI file..")
 
         with rasterio.open('output/tmp/gi-nogdhclasses.tiff') as ginogdhsrc:
             classifiedprofile = ginogdhsrc.profile
@@ -286,8 +286,8 @@ class EvaluationsProcessor():
 
             with rasterio.open('output/evals/GI/GI.tiff', 'w', **classifiedprofile) as classifieddst:
                 classifieddst.write(classifiedbands2)
-        print "Reclassing completed"
-        print "..."
+        print("Reclassing completed")
+        print("...")
         return 'output/evals/GI/GI.tiff'
 
     def generateUrbanOutput(self):
@@ -300,7 +300,7 @@ class EvaluationsProcessor():
         with rasterio.open(self.files['classified_cropped_ndvi_file'], "r") as src2:
             src2bands = src2.read(masked=True)
         
-        print "Combining Rasters.."
+        print("Combining Rasters..")
         with rasterio.open('output/tmp/urban-nogdhclasses.tiff', 'w', **src1profile) as dst:
             bands3 = src1bands + src2bands
             dst.write(bands3)
@@ -308,7 +308,7 @@ class EvaluationsProcessor():
         # 1 existing 2 Not appropriate 3: Capable 4: Suitable 5: Feasable 
         URBClassification = dict([(501,2),(502,2),(503,2),(504,2),(104,2),(204,2), (304,2), (404,2), (101,2),(201,2),(301,2),(401,2), (402,3), (403,2),(102,4),(103,4), (201,5), (203,5), (302,5), (303,5),])
 
-        print "Reclassing final URB file.."
+        print("Reclassing final URB file..")
         with rasterio.open('output/tmp/urban-nogdhclasses.tiff') as urbannogdhsrc:
             classifiedprofile = urbannogdhsrc.profile
             classifiedbands = urbannogdhsrc.read(masked=True)
@@ -332,7 +332,7 @@ class EvaluationsProcessor():
         with rasterio.open(self.files['classified_cropped_ndvi_file'], "r") as src2:
             src2bands = src2.read(masked=True)
 
-        print "Combining Rasters.."
+        print("Combining Rasters..")
         with rasterio.open('output/tmp/ag-nogdhclasses.tiff', 'w', **src1profile) as dst:
             bands3 = src1bands + src2bands
             dst.write(bands3)
@@ -340,7 +340,7 @@ class EvaluationsProcessor():
         # 1 existing 2 Not appropriate 3: Capable 4: Suitable 5: Feasable 
         AGClassification = dict([(101,2),(104,2),(201,2),(204,2),(301,2),(302,2), (303,2), (304,2), (102,3),(103,3),(202,4),(203,4),(401,2),(402,3),(403,3),(404,2),(501,2),(502,2),(503,2),(504,2) ])
 
-        print "Reclassing AG file file.."
+        print("Reclassing AG file file..")
         with rasterio.open('output/tmp/ag-nogdhclasses.tiff') as agnogdhsrc:
             classifiedprofile = agnogdhsrc.profile
             classifiedbands = agnogdhsrc.read(masked=True)
@@ -369,8 +369,8 @@ if __name__ == '__main__':
     myEvaluationsProcessor.computeNDVINaturalBreaks(rawndvipath)
     # Check if transport file is present
     TransRaster = 0
-    if os.path.exists(rawtranspath):
-        TransRaster = myEvaluationsProcessor.computeTransportNaturalBreaks(rawtranspath)
+    # if os.path.exists(rawtranspath):
+        # TransRaster = myEvaluationsProcessor.computeTransportNaturalBreaks(rawtranspath)
     myEvaluationsProcessor.classifyUrbanSlope(rawslopepath)
     myEvaluationsProcessor.classifyAGSlope(rawslopepath)
     myEvaluationsProcessor.cropSlopeAndNDVI()

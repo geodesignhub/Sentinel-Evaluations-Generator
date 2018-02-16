@@ -7,7 +7,7 @@ from shapely.geometry.base import BaseGeometry
 from shapely.geometry import shape, mapping, shape, asShape
 from shapely.geometry import MultiPolygon, MultiPoint, MultiLineString
 from shapely.ops import unary_union
-from urlparse import urlparse
+from urllib.parse import urlparse
 from os.path import splitext, basename
 
 class EvaluationsFactory():
@@ -51,11 +51,11 @@ class EvaluationsFactory():
 		try:
 			response = httsleep(statusurl, auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, until = self.until, alarms = self.alarms, max_retries=5, polling_interval=30)
 		except StopIteration as si:
-			print "Max retries has been exhausted!"
+			print("Max retries has been exhausted!")
 		except Alarm as al:
-			print "Got a response with status ERROR!"
-			print "Here's the response:", al.response
-			print "And here's the alarm went off:", al.alarm
+			print("Got a response with status ERROR!")
+			print("Here's the response:", al.response)
+			print("And here's the alarm went off:", al.alarm)
 		else:
 			r = response.json()
 			if r['status'] == 'finished':
@@ -68,7 +68,7 @@ class EvaluationsFactory():
 		
 		for url in urls: 
 			headers = {'content-type': 'application/json'}
-			print "Downloading from %s..." % url
+			print("Downloading from %s..." % url)
 			disassembled = urlparse(url)
 			filename = basename(disassembled.path)
 			cwd = os.getcwd()
@@ -86,17 +86,15 @@ class EvaluationsFactory():
 
 if __name__ == '__main__':
 	aoiurl = config.settings['aoi']
-	systems = config.settings['systems']
 	myEvaluationsFactory = EvaluationsFactory()
 	allstatusurls = []
-	for system in systems: 
-		currentprocesschain = config.processchains[system]
-		resp = myEvaluationsFactory.executeProcessChain(currentprocesschain)
-		
-		isSuccessful, statusurl = myEvaluationsFactory.parseProcessChainResponse(resp)
-		print statusurl
-		if isSuccessful: 
-			allstatusurls.append(statusurl)
+	ndviprocchain = config.processchains[0]
+	resp = myEvaluationsFactory.executeProcessChain(ndviprocchain)	
+	isSuccessful, statusurl = myEvaluationsFactory.parseProcessChainResponse(resp)
+
+	if isSuccessful: 
+		print("Status URL: %s"% statusurl)
+		allstatusurls.append(statusurl)
 
 	if allstatusurls:
 		myEvaluationsFactory.pollStatusURL(statusurl)

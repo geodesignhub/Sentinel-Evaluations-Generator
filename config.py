@@ -1,16 +1,13 @@
 settings = {
-	"aoi":"https://gdh-data-sandbox.ams3.digitaloceanspaces.com/data/brazil_polygon.json",
-  "systems":["GI", "TRANS", "URBAN", "AG", "HYDRO"],
-  
-  # "systems": ['GI'],
+	"aoi":"https://gdh-data.ams3.digitaloceanspaces.com/scarborough.geojson",
+ "systems":["GI", "TRANS", "URBAN", "AG", "HYDRO"],
 	"outputdirectory":"output",
 	"workingdirectory": "working", 
-	"sentinelscene": "S2B_MSIL1C_20171010T133209_N0205_R081_T23LKC_20171010T133528",
+	"sentinelscene": "S2B_MSIL1C_20171126T112359_N0206_R037_T30UXF_20171126T132429",
   "rivers":"rivers/rivers.shp",
   "watersheds":"watershed/watershed.shp"
 }
-processchains = {
-	"GI":{"list": [{"id": "importer_1",
+processchains = [{"list": [{"id": "importer_1",
           "module": "importer",
           "inputs": [{"import_descr": {"source": settings['sentinelscene'],
                                        "type": "sentinel2",
@@ -77,5 +74,5 @@ processchains = {
                        # "value": "B08"}
                        ]}
          ],
-"version": "1"}
-}
+"version": "1"}]
+
