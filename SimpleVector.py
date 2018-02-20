@@ -1,6 +1,6 @@
 import json, geojson, requests
 import random, os, sys,httsleep
-import GeodesignHub, config, ActiniaCredentials
+import GeodesignHub, config, Credentials
 from httsleep import httsleep
 from httsleep.exceptions import Alarm
 from shapely.geometry.base import BaseGeometry
@@ -17,8 +17,8 @@ class EvaluationsFactory():
 	''' This is the main class to connect to Mundialis '''
 	def __init__(self):
 		''' Credentials '''
-		self.MUNDIALIS_USERNAME = ActiniaCredentials.cred['username']
-		self.MUNDIALIS_PASSWORD= ActiniaCredentials.cred['password']
+		self.MUNDIALIS_USERNAME = Credentials.cred['username']
+		self.MUNDIALIS_PASSWORD= Credentials.cred['password']
 		self.port = u'443'
 		self.servername = 'https://actinia.mundialis.de'
 		self.endpoint = 'locations/latlong/processing_async_export'
@@ -91,8 +91,8 @@ class DOHelper(object):
 		self.client = self.session.client('s3',
 								region_name='ams3',
 								endpoint_url='https://ams3.digitaloceanspaces.com',
-								aws_access_key_id='FVCWIBVOJZTBZIVXH53S',
-								aws_secret_access_key='1EcVfv6Fh4UeJ1uVdbRe2nAfVJ+w26Mp41vQm+Wuf0E')
+								aws_access_key_id=Credentials.docred['accesskey'],
+								aws_secret_access_key=Credentials.docred['secret'])
 
 
 		# # List all Spaces in the region
@@ -125,8 +125,8 @@ if __name__ == '__main__':
 		     'inputs': [{'import_descr': {'source': file,
 		     'type': 'vector'}, 'param': 'map', 'value': 'input_point'}]},
 		    {'id': 'v_buffer', 'module': 'v.buffer', 'inputs': [{'param': 'input',
-		     'value': 'map'},{'param': 'output',
-		     'value': 'buf_point'}, {'param':'distance', 'value':'100'},{'param':'units', 'value':'meters'}]},
+		     'value': 'input_point'},{'param': 'output',
+		     'value': 'buf_point'}, {'param':'distance', 'value':'100'}]},
 
 		    {'id': 'exporter_1', 'module': 'exporter',
 		     'outputs': [{'export': {'type': 'vector', 'format': 'GeoJSON'},
