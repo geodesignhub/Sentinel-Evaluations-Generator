@@ -13,7 +13,7 @@ import boto3
 import config
 
 
-class EvaluationsFactory():
+class ActiniaFactory():
 	''' This is the main class to connect to Mundialis '''
 	def __init__(self):
 		''' Credentials '''
@@ -95,12 +95,6 @@ class DOHelper(object):
 								aws_secret_access_key=Credentials.docred['secret'])
 
 
-		# # List all Spaces in the region
-		# response = client.list_buckets()
-		# for s in [space['Name'] for space in response['Buckets']]:
-		# 	print(s)
-
-		# Add a file to a Space
 	def uploadFile(self, filepath):
 		fname = os.path.basename(filepath)
 		oppath = 'tmp/'+fname
@@ -110,7 +104,7 @@ class DOHelper(object):
 		return 'https://gdh-data.ams3.digitaloceanspaces.com/'+oppath
 
 if __name__ == '__main__':
-	myEvaluationsFactory = EvaluationsFactory()
+	myActinia = ActiniaFactory()
 	allstatusurls = []
 	files = []
 	cwd = os.getcwd()
@@ -120,25 +114,26 @@ if __name__ == '__main__':
 	files.append(myDoHelper.uploadFile(fpath))
 	
 	for file in files: 
-		simplificationprocesschain = {'list': [
+		vectorprocesschain = {'list': [
+			# Import File from Cloud Storge
 		    {'id': 'importer_1', 'module': 'importer',
-		     'inputs': [{'import_descr': {'source': file,
-		     'type': 'vector'}, 'param': 'map', 'value': 'input_point'}]},
+		     'inputs': [{'import_descr': {'source': file, 'type': 'vector'}, 'param': 'map', 'value': 'input_point'}]},
+			# Perform this GIS Operation
 		    {'id': 'v_buffer', 'module': 'v.buffer', 'inputs': [{'param': 'input',
-		     'value': 'input_point'},{'param': 'output',
-		     'value': 'buf_point'}, {'param':'distance', 'value':'100'}]},
-
+		     'value': 'input_point'},{'param': 'output', 'value': 'buf_point'}, {'param':'distance', 'value':'100'}]},
+			# Export the output
 		    {'id': 'exporter_1', 'module': 'exporter',
 		     'outputs': [{'export': {'type': 'vector', 'format': 'GeoJSON'},
 		     'param': 'map', 'value': 'buf_point'}  ]},
 		    ], 'version': '1'} 
 		    	
 
-		resp = myEvaluationsFactory.executeProcessChain(simplificationprocesschain)
+		resp = myActinia.executeProcessChain(vectorprocesschain)
 		isSuccessful, statusurl = myEvaluationsFactory.parseProcessChainResponse(resp)
 		print(statusurl)
-		if isSuccessful: 
-			allstatusurls.append(statusurl)
+
+		# if isSuccessful: 
+		# 	allstatusurls.append(statusurl)
 
 	# if allstatusurls:
 	# 	myEvaluationsFactory.pollStatusURL(statusurl)
