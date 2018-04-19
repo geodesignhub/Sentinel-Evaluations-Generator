@@ -1,6 +1,6 @@
 import json, geojson, requests
 import random, os, sys,httsleep
-import GeodesignHub, config, ActiniaCredentials
+import GeodesignHub, config, Credentials
 from httsleep import httsleep
 from httsleep.exceptions import Alarm
 from shapely.geometry.base import BaseGeometry
@@ -14,8 +14,8 @@ class EvaluationsFactory():
 	''' This is the main class to connect to Mundialis '''
 	def __init__(self):
 		''' Credentials '''
-		self.MUNDIALIS_USERNAME = ActiniaCredentials.cred['username']
-		self.MUNDIALIS_PASSWORD= ActiniaCredentials.cred['password']
+		self.MUNDIALIS_USERNAME = Credentials.cred['username']
+		self.MUNDIALIS_PASSWORD= Credentials.cred['password']
 		self.port = u'443'
 		self.servername = 'https://actinia.mundialis.de'
 		self.endpoint = 'locations/latlong/processing_async_export'

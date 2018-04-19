@@ -12,7 +12,6 @@ from os.path import splitext, basename
 import boto3
 import config
 
-
 class EvaluationsFactory():
 	''' This is the main class to connect to Mundialis '''
 	def __init__(self):

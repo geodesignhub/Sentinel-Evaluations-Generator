@@ -76,7 +76,6 @@ class EvaluationsProcessor():
         with rasterio.open(rawtransfile) as src:
             profile = src.profile
             bands = src.read()
-            stats = []
             for band in bands:
                 b = band[(band != np.array(None)) & (np.logical_not(np.isnan(band))) ]
                 breaks = nb(b.ravel(),k=4,initial=1)
@@ -136,7 +135,6 @@ class EvaluationsProcessor():
         with rasterio.open(rawndvifile) as src:
             profile = src.profile
             bands = src.read()
-            stats = []
             for band in bands:
                 b = band[(band != np.array(None)) & (np.logical_not(np.isnan(band))) ]
                 breaks = nb(b.ravel(),k=4,initial=1)
@@ -369,8 +367,8 @@ if __name__ == '__main__':
     myEvaluationsProcessor.computeNDVINaturalBreaks(rawndvipath)
     # Check if transport file is present
     TransRaster = 0
-    # if os.path.exists(rawtranspath):
-        # TransRaster = myEvaluationsProcessor.computeTransportNaturalBreaks(rawtranspath)
+    if os.path.exists(rawtranspath):
+        TransRaster = myEvaluationsProcessor.computeTransportNaturalBreaks(rawtranspath)
     myEvaluationsProcessor.classifyUrbanSlope(rawslopepath)
     myEvaluationsProcessor.classifyAGSlope(rawslopepath)
     myEvaluationsProcessor.cropSlopeAndNDVI()
