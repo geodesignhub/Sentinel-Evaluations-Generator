@@ -17,7 +17,7 @@ class EvaluationsFactory():
 		self.MUNDIALIS_USERNAME = Credentials.cred['username']
 		self.MUNDIALIS_PASSWORD= Credentials.cred['password']
 		self.port = u'443'
-		self.servername = 'https://actinia.mundialis.de'
+		self.servername = 'https://actinia.mundialis.de/api/v1'
 		self.endpoint = 'locations/latlong/processing_async_export'
 		self.url = self.servername+"/"+self.endpoint
 		self.until = {
