@@ -49,7 +49,7 @@ class EvaluationsFactory():
 	def pollStatusURL(self, statusurl):
 		headers = {'content-type': 'application/json'}
 		try:
-			response = httsleep(statusurl, auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, until = self.until, alarms = self.alarms, max_retries=5, polling_interval=30)
+			response = httsleep(statusurl, auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, until = self.until, alarms = self.alarms, max_retries=5, polling_interval=60)
 		except StopIteration as si:
 			print("Max retries has been exhausted!")
 		except Alarm as al:
