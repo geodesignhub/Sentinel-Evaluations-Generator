@@ -86,7 +86,7 @@ class EvaluationsProcessor():
         with rasterio.open(classfiedtranspath, "w", **trans_out_meta) as trans_dest:
             trans_dest.write(trans_out_image)
 
-        TransClassification = dict([(1,2),(2,3),(3,1)])
+        TransClassification = dict([(1,2),(2,3),(3,1),(4,1)])
 
         print("Reclassing Transport file..")
 
