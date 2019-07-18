@@ -1,9 +1,9 @@
 settings = {
-	"aoi":"https://gdh-data.ams3.digitaloceanspaces.com/scarborough.geojson",
+	"aoi":"https://gdh-data.ams3.digitaloceanspaces.com/boundaries/palmaria.geojson",
  "systems":["GI", "TRANS", "URBAN", "AG", "HYDRO"],
 	"outputdirectory":"output",
 	"workingdirectory": "working", 
-	"sentinelscene": "S2B_MSIL1C_20171126T112359_N0206_R037_T30UXF_20171126T132429",
+	"sentinelscene": "S2B_MSIL1C_20190419T101029_N0207_R022_T32TNP_20190419T122357",
   "rivers":"rivers/rivers.shp",
   "watersheds":"watershed/watershed.shp"
 }
