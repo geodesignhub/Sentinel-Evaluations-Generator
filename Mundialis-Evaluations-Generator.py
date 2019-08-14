@@ -16,7 +16,6 @@ if ENV_FILE:
     load_dotenv(ENV_FILE)
 
 
-
 class EvaluationsFactory():
 	''' This is the main class to connect to Mundialis '''
 	def __init__(self):
@@ -36,27 +35,27 @@ class EvaluationsFactory():
 		    {'status_code': 404}
 		]
 
-	def executeProcessChain(self, processchain):
+	def execute_process_chain(self, processchain):
 		headers = {'content-type': 'application/json', 'Accept':'application/json'}
 		r = requests.post(self.url, auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers,  data= json.dumps(processchain))
 		return r
 
-	def parseProcessChainResponse(self, response):
+	def parse_process_chain(self, response):
 		if response.status_code == 200:
 		    resp = response.json()
 		    # get data back from them
-		    isSuccessful = 0
-		    statusurl = ''
+		    is_successful = 0
+		    status_url = ''
 		    if resp['status']=='accepted':
-			    statusurl =  resp['urls']['status']
-			    isSuccessful = 1
+			    status_url =  resp['urls']['status']
+			    is_successful = 1
 
-		return isSuccessful, statusurl
+		return is_successful, status_url
 
-	def pollStatusURL(self, statusurl):
+	def poll_status_url(self, status_url):
 		headers = {'content-type': 'application/json'}
 		try:
-			response = httsleep(statusurl, auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, until = self.until, alarms = self.alarms, max_retries=5, polling_interval=60)
+			response = httsleep(status_url, auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, until = self.until, alarms = self.alarms, max_retries=5, polling_interval=60)
 		except StopIteration as si:
 			print("Max retries has been exhausted!")
 		except Alarm as al:
@@ -67,11 +66,11 @@ class EvaluationsFactory():
 			r = response.json()
 			if r['status'] == 'finished':
 				outputurls = r['urls']['resources']
-				self.downloadOutput(outputurls)
+				self.download_output(outputurls)
 
 
 
-	def downloadOutput(self, urls):
+	def download_output(self, urls):
 		
 		for url in urls: 
 			headers = {'content-type': 'application/json'}
@@ -79,10 +78,10 @@ class EvaluationsFactory():
 			disassembled = urlparse(url)
 			filename = basename(disassembled.path)
 			cwd = os.getcwd()
-			outputdirectory = os.path.join(cwd,config.settings['outputdirectory'])
-			if not os.path.exists(outputdirectory):
-				os.mkdir(outputdirectory)
-			local_filename = os.path.join(outputdirectory, filename)
+			output_directory = os.path.join(cwd,config.settings['output_directory'])
+			if not os.path.exists(output_directory):
+				os.mkdir(output_directory)
+			local_filename = os.path.join(output_directory, filename)
 			r = requests.get(url,auth=(self.MUNDIALIS_USERNAME,self.MUNDIALIS_PASSWORD),headers= headers, stream=True)
 			with open(local_filename, 'wb') as f:
 			    for chunk in r.iter_content(chunk_size=1024): 
@@ -93,17 +92,17 @@ class EvaluationsFactory():
 
 if __name__ == '__main__':
 	aoiurl = config.settings['aoi']
-	myEvaluationsFactory = EvaluationsFactory()
+	my_evaluations_factory = EvaluationsFactory()
 	allstatusurls = []
 	ndviprocchain = config.processchains[0]
-	resp = myEvaluationsFactory.executeProcessChain(ndviprocchain)	
-	isSuccessful, statusurl = myEvaluationsFactory.parseProcessChainResponse(resp)
+	resp = my_evaluations_factory.execute_process_chain(ndviprocchain)	
+	is_successful, status_url = my_evaluations_factory.parse_process_chain(resp)
 
-	if isSuccessful: 
-		print("Status URL: %s"% statusurl)
-		allstatusurls.append(statusurl)
+	if is_successful: 
+		print("Status URL: %s"% status_url)
+		allstatusurls.append(status_url)
 
 	if allstatusurls:
-		myEvaluationsFactory.pollStatusURL(statusurl)
+		my_evaluations_factory.poll_status_url(status_url)
 
 	

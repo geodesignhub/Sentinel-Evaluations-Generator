@@ -8,7 +8,7 @@ class DataDownloader():
     def __init__(self):
         self.cwd = os.getcwd()
 
-    def downloadFiles(self, urls):
+    def download_files(self, urls):
         for url in urls: 
             disassembled = urlparse(url)
             filename = basename(disassembled.path)
