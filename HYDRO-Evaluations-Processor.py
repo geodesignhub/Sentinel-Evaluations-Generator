@@ -25,8 +25,8 @@ if __name__ == "__main__":
 
     watershed_with_rivers = sjoin(watershed,river, how='inner', op='intersects')
 
-    watershed_sum_by_river` = watershed_with_rivers.groupby(["HYBAS_ID"]).agg(dict(length="sum")).reset_index()
-    watershed['riverlength'] = watershed.HYBAS_ID.map(watershed_sum_by_river`.set_index('HYBAS_ID')['length'].to_dict())
+    watershed_sum_by_river = watershed_with_rivers.groupby(["HYBAS_ID"]).agg(dict(length="sum")).reset_index()
+    watershed['riverlength'] = watershed.HYBAS_ID.map(watershed_sum_by_river.set_index('HYBAS_ID')['length'].to_dict())
     # replace NaN with a very small number 
 
     watershed['riverlength'].fillna(1, inplace=True)
@@ -39,8 +39,8 @@ if __name__ == "__main__":
 
     watershed['areatype'] = watershed['areatype'].map({3:'green',2:'green2',1:'green2',0:'green3'})
 
-    inter = geopandas.overlay(watershed, aoi, how='intersection')
+    intersect_features = geopandas.overlay(watershed, aoi, how='intersection')
 
     with open(output_geojson, 'w') as f:
-        f.write(inter.to_json())
+        f.write(intersect_features.to_json())
         
